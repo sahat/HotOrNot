@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  .container
+    form.form-horizontal(id='signup-form', method='POST')
+      input(type='hidden', name='_csrf', value=token)
+      legend Complete Registration
+      .form-group
+        label.col-sm-3.control-label(for='name') Name
+        .col-sm-7
+          input.form-control(type='text', name='name', id='name', placeholder='Name', autofocus)
+      .form-group
+        label.col-sm-3.control-label(for='gender') Gender
+        .col-sm-7
+          label.radio-inline
+            input(type='radio', name='gender', value='male')
+            | Male
+          label.radio-inline
+            input(type='radio', name='gender', value='female')
+            | Female
+      .form-group
+        label.col-sm-3.control-label(for='birthday') Birthday
+        .col-sm-7
+          input.form-control(type='text', name='birthday', id='birthday', placeholder='02/06/2014')
+      .form-group
+        label.col-sm-3.control-label(for='location') Location
+        .col-sm-7
+          input.form-control(type='text', name='location', id='location', placeholder='New York, United States')
+      .form-group
+        label.col-sm-3.control-label(for='purpose') I am here for...
+        .col-sm-7
+          select.form-control
+            option Make new friends
+            option Chat
+            option Date
+
+      .form-group
+        .col-sm-offset-3.col-sm-7
+          button.btn.btn-success(type='submit')
+            i.fa.fa-check
+            | Signup

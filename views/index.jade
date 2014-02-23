@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  img.bg(src='/img/wg_blurred_backgrounds_5.jpg')
+  .container
+    .row
+      .col-xs-5
+        h1.app-title
+          strong Hot
+          |  or
+          strong  Not
+        .lead.slogan See who is hot around you!
+        a.btn.btn-lg.btn-social.btn-facebook(href='/signup')
+          i.fa.fa-facebook
+          | Sign in with Facebook
+      .col-xs-7
+        img.hover(src='/img/screenshot.png', width="100%")
+  footer
+    .container
+      | © 2014 Company, Inc.
