@@ -4,6 +4,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
+var less = require('less-middleware');
 
 
 var homeController = require('./controllers/home');
@@ -39,6 +40,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(flash());
+app.use(less({ src: __dirname + '/public', compress: true }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.errorHandler());

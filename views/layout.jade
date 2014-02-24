@@ -7,9 +7,10 @@ html
     meta(name='description', content='')
     meta(name='author', content='')
     title #{title} - Starter Template for Bootstrap
-    link(src='/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/css/styles.css', rel='stylesheet')
     script(src='/js/jquery-2.1.0.min.js')
     script(src='/js/bootstrap.min.js')
   body
     include partials/flash
-    block content
+    .container
+      block content
