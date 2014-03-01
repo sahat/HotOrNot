@@ -6,32 +6,36 @@ block content
       input(type='hidden', name='_csrf', value=token)
       legend Complete Registration
       .form-group
-        label.col-sm-3.control-label(for='name') Name
+        label.col-sm-3.control-label(for='firstName') First Name
         .col-sm-7
-          input.form-control(type='text', name='name', id='name', placeholder='Name', autofocus)
+          input.form-control(type='text', name='firstName', value=user.firstName, placeholder='First Name', autofocus)
+      .form-group
+        label.col-sm-3.control-label(for='lastName') Last Name
+        .col-sm-7
+          input.form-control(type='text', name='lastName', value=user.lastName, placeholder='Last Name')
       .form-group
         label.col-sm-3.control-label(for='gender') Gender
         .col-sm-7
           label.radio-inline
-            input(type='radio', name='gender', value='male')
+            input(type='radio', name='gender', value='male', checked=user.gender=='male')
             | Male
           label.radio-inline
-            input(type='radio', name='gender', value='female')
+            input(type='radio', name='gender', value='female', checked=user.gender=='female')
             | Female
       .form-group
         label.col-sm-3.control-label(for='birthday') Birthday
         .col-sm-7
-          input.form-control(type='text', name='birthday', id='birthday', placeholder='02/06/2014')
+          input.form-control(type='text', name='birthday', value=user.birthday, placeholder='02/06/2014')
       .form-group
         label.col-sm-3.control-label(for='location') Location
         .col-sm-7
-          input.form-control(type='text', name='location', id='location', placeholder='New York, United States')
+          input.form-control(type='text', name='location', value=user.location, placeholder='New York, United States')
       .form-group
         label.col-sm-3.control-label(for='hereFor') I am here for...
         .col-sm-7
           select.form-control
             option Make new friends
-            option Chat`
+            option Chat
             option Date
 
       .form-group
