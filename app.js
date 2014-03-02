@@ -112,8 +112,7 @@ app.get('/logout', function(req, res) {
  * Signup page.
  */
 
-app.get('/signup', function(req, res) {
-  if (req.user) return res.redirect('/');
+app.get('/signup', isAuthenticated, function(req, res) {
   res.render('signup', {
     title: 'Create Account'
   });
@@ -163,7 +162,13 @@ app.post('/signup', function(req, res, next) {
  */
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location', 'user_birthday'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
+  if (!req.user.hereFor) {
+    res.redirect('/signup');
+  } else {
+    res.redirect('/');
+  }
+});
 
 app.listen(app.get('port'), function() {
   console.log("Express server listening on port ", app.get('port'));
