@@ -126,9 +126,12 @@ app.get('/signup', isAuthenticated, function(req, res) {
  */
 
 app.post('/signup', function(req, res, next) {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('firstName', 'First Name cannot be blank').notEmpty();
+  req.assert('lastName', 'Last Name cannot be blank').notEmpty();
+  req.assert('gender', 'You must select gender').notEmpty();
+  req.assert('birthday', 'You must enter your birthday').notEmpty();
+  req.assert('location', 'Location cannot be blank').notEmpty();
+  req.assert('hereFor', 'You must select Here For reason').notEmpty();
 
   var errors = req.validationErrors();
 
@@ -137,20 +140,14 @@ app.post('/signup', function(req, res, next) {
     return res.redirect('/signup');
   }
 
-  var user = new User({
-    email: req.body.email,
-    password: req.body.password
-  });
-
-  user.save(function(err) {
-    if (err) {
-      if (err.code === 11000) {
-        req.flash('errors', { msg: 'User with that email already exists.' });
-      }
-      return res.redirect('/signup');
-    }
-    req.logIn(user, function(err) {
-      if (err) return next(err);
+  User.findById(req.user.id, function(err, user) {
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.gender = req.body.gender;
+    user.birthday = req.body.birthday;
+    user.location = req.body.location;
+    user.hereFor = req.body.hereFor;
+    user.save(function(err) {
       res.redirect('/');
     });
   });
@@ -162,7 +159,7 @@ app.post('/signup', function(req, res, next) {
  */
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location', 'user_birthday'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
   if (!req.user.hereFor) {
     res.redirect('/signup');
   } else {
@@ -171,5 +168,5 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRe
 });
 
 app.listen(app.get('port'), function() {
-  console.log("Express server listening on port ", app.get('port'));
+  console.log('Express server listening on port ', app.get('port'));
 });
