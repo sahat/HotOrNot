@@ -51,7 +51,7 @@ passport.use(new FacebookStrategy(config.facebook, function(req, accessToken, re
       gender: profile._json.gender,
       location: (profile._json.location) ? profile._json.location.name : '',
       birthday: profile._json.birthday,
-      picture: 'https://graph.facebook.com/' + profile.id + '/picture?type=large'
+      picture: 'https://graph.facebook.com/' + profile.id + '/picture?width=9999&height=9999'
     });
     user.save(function(err) {
       done(err, user);
