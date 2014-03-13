@@ -1,13 +1,11 @@
 var express = require('express');
+var expressValidator = require('express-validator');
 var flash = require('express-flash');
+var less = require('less-middleware');
 var path = require('path');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var expressValidator = require('express-validator');
-var less = require('less-middleware');
-
-var homeController = require('./controllers/home');
 
 var config = require('./config');
 
@@ -40,7 +38,6 @@ passport.deserializeUser(function(id, done) {
 passport.use(new FacebookStrategy(config.facebook, function(req, accessToken, refreshToken, profile, done) {
   User.findOne({ facebookId: profile.id }, function(err, existingUser) {
     if (existingUser) return done(null, existingUser);
-    console.log(profile);
     var user = new User({
       facebookId: profile.id,
       accessToken: accessToken,
@@ -63,13 +60,6 @@ var isAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect('/login');
 };
-
-var isAuthorized = function(req, res, next) {
-  var provider = req.path.split('/').slice(-1)[0];
-  if (_.findWhere(req.user.tokens, { kind: provider })) next();
-  else res.redirect('/auth/' + provider);
-};
-
 
 var app = express();
 
@@ -97,15 +87,11 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.errorHandler());
 
-/**
- * Application routes.
- */
 
-app.get('/', homeController.index);
-app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
+app.get('/', function(req, res) {
+  res.render('index');
 });
+
 
 /**
  * GET /signup
@@ -120,9 +106,7 @@ app.get('/signup', isAuthenticated, function(req, res) {
 
 /**
  * POST /signup
- * Create a new local account.
- * @param email
- * @param password
+ * Finalize Facebook signup with additional information.
  */
 
 app.post('/signup', function(req, res, next) {
@@ -154,17 +138,19 @@ app.post('/signup', function(req, res, next) {
 });
 
 
-/**
- * OAuth routes for sign-in.
- */
-
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location', 'user_birthday'] }));
+
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
   if (!req.user.hereFor) {
     res.redirect('/signup');
   } else {
     res.redirect('/');
   }
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
 });
 
 app.listen(app.get('port'), function() {
