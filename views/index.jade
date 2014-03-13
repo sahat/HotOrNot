@@ -23,11 +23,11 @@ block content
     a(href='/logout') Logout
     .row
       .col-xs-6.col-xs-offset-3
-        button.btn.btn-success.pull-left
-          i.fa.fa-thumbs-up
-          | Like
-        button.btn.btn-danger.pull-right
-          i.fa.fa-thumbs-down
-          | Dislike
-        br
-        img.img-thumbnail(src='#{user.picture}')
+        .btn-group.btn-group-justified
+          a.btn.btn-success
+            i.fa.fa-thumbs-up
+            | Like
+          a.btn.btn-danger
+            i.fa.fa-thumbs-down
+            | Dislike
+        img(src='#{user.picture}', width='100%')
